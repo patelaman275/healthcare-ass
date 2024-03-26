@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="shortcut icon" type="x-icon" href="bug.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>COVID-19 Risk Calculator</title>
+<link href="css/style3.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h2>COVID-19 Risk Calculator</h2>
+        <form id="covidRiskCalculatorForm">
+    <h2>Medical History:</h2>
+    <label for="age">Age</label>
+    <input type="number" id="age" required>
+    <label for="gender">Gender</label>
+    <select id="gender" required>
+        <option value="">Select</option>
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+        <option value="Other">Other</option>
+    </select>
+
+    <label for="smoking">Do you smoke?</label>
+    <select id="smoking" required>
+        <option value="">Select</option>
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+    </select>
+
+    <label for="diabetes">Do you have diabetes?</label>
+    <select id="diabetes" required>
+        <option value="">Select</option>
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+    </select>
+
+    <label for="hypertension">Do you have hypertension (high blood pressure)?</label>
+    <select id="hypertension" required>
+        <option value="">Select</option>
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+    </select>
+
+    <h2>Symptoms:</h2>
+    <label for="fever">Do you have fever (temperature above 100.4°F or 38°C)?</label>
+    <select id="fever" required>
+        <option value="">Select</option>
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+    </select>
+
+    <label for="cough">Do you have a persistent cough?</label>
+    <select id="cough" required>
+        <option value="">Select</option>
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+    </select>
+
+    <label for="breathlessness">Do you experience breathlessness or difficulty breathing?</label>
+    <select id="breathlessness" required>
+        <option value="">Select</option>
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+    </select>
+
+    <h2>Recent Exposure:</h2>
+    <label for="exposure">Have you recently been in close contact with someone diagnosed with COVID-19?</label>
+    <select id="exposure" required>
+        <option value="">Select</option>
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+    </select>
+
+    <h2>Numerical Data:</h2>
+    <label for="temperature">Body Temperature (in °F)</label>
+    <input type="number" id="temperature" required>
+    <label for="bloodPressure">Blood Pressure (systolic/diastolic, in mmHg)</label>
+    <input type="text" id="bloodPressure" required>
+    <label for="heartRate">Heart Rate (beats per minute)</label>
+    <input type="number" id="heartRate" required>
+    <label for="spo2">Oxygen Saturation (SpO2, in %)</label>
+    <input type="number" id="spo2" required>
+
+    <h2>Additional Information:</h2>
+    <label for="travel">Have you traveled recently (within the last 14 days)?</label>
+    <select id="travel" required>
+        <option value="">Select</option>
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+    </select>
+
+    <label for="vaccineDose1">Have you received the first dose of COVID-19 vaccine?</label>
+    <select id="vaccineDose1" required>
+        <option value="">Select</option>
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+    </select>
+
+    <label for="vaccineDose2">Have you received the second dose of COVID-19 vaccine?</label>
+    <select id="vaccineDose2" required>
+        <option value="">Select</option>
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+    </select>
+
+    <button type="button" onclick="calculateCovidRisk()">Calculate Risk</button>
+</form>
+
+<div class="result" id="covidResult"></div>
+
+<script>
+function calculateCovidRisk() {
+    const age = parseInt(document.getElementById('age').value);
+    const gender = document.getElementById('gender').value;
+    const smoking = document.getElementById('smoking').value;
+    const diabetes = document.getElementById('diabetes').value;
+    const hypertension = document.getElementById('hypertension').value;
+    const fever = document.getElementById('fever').value;
+    const cough = document.getElementById('cough').value;
+    const breathlessness = document.getElementById('breathlessness').value;
+    const exposure = document.getElementById('exposure').value;
+    const temperature = parseFloat(document.getElementById('temperature').value);
+    const bloodPressure = document.getElementById('bloodPressure').value;
+    const heartRate = parseInt(document.getElementById('heartRate').value);
+    const spo2 = parseInt(document.getElementById('spo2').value);
+    const travel = document.getElementById('travel').value;
+    const vaccineDose1 = document.getElementById('vaccineDose1').value;
+    const vaccineDose2 = document.getElementById('vaccineDose2').value;
+
+    // Perform risk calculation
+    let riskPercentage = 0;
+
+    // Adding points based on risk factors
+    if (age > 65) riskPercentage += 10;
+    if (gender === "Male") riskPercentage += 5;
+    if (smoking === "Yes") riskPercentage += 10;
+    if (diabetes === "Yes") riskPercentage += 15;
+    if (hypertension === "Yes") riskPercentage += 10;
+    if (fever === "Yes") riskPercentage += 15;
+    if (cough === "Yes") riskPercentage += 10;
+    if (breathlessness === "Yes") riskPercentage += 15;
+    if (exposure === "Yes") riskPercentage += 20;
+
+    // Adjust risk based on numerical data
+    if (temperature > 100.4) riskPercentage += 10; // Adjust based on fever
+    if (bloodPressure === "High") riskPercentage += 10; // Adjust based on high blood pressure
+    if (heartRate > 100) riskPercentage += 10; // Adjust based on high heart rate
+    if (spo2 < 95) riskPercentage += 10; // Adjust based on low SpO2
+
+    // Adjust risk based on additional information
+    if (travel === "Yes") riskPercentage += 10; // Adjust based on recent travel
+    if (vaccineDose1 === "Yes") riskPercentage -= 10; // Adjust based on first vaccine dose
+    if (vaccineDose2 === "Yes") riskPercentage -= 15; // Adjust based on second vaccine dose
+
+    // Ensure risk percentage is within bounds
+    riskPercentage = Math.max(0, Math.min(100, riskPercentage));
+
+    let message;
+
+    // Determine risk category and message
+    if (riskPercentage <= 25) {
+        message = "Your risk of COVID-19 is low. Keep practicing preventive measures such as wearing masks and maintaining social distance.";
+    } else if (riskPercentage > 25 && riskPercentage <= 50) {
+        message = "Your risk of COVID-19 is moderate. Be vigilant and avoid crowded places. Follow guidelines from health authorities.";
+    } else if (riskPercentage > 50 && riskPercentage <= 75) {
+        message = "Your risk of COVID-19 is high. Take extra precautions and minimize contact with others. Consider getting tested if symptoms develop.";
+    } else {
+        message = "Your risk of COVID-19 is very high. Immediate isolation and testing are strongly advised. Contact healthcare authorities for guidance.";
+    }
+
+    // Display the result message
+    document.getElementById('covidResult').innerText = message;
+}
+</script>
+<footer><solid>⚠️Disclaimer: </solid> This website offers general information and should not be a substitute for professional medical advice. Always consult with a healthcare provider for any health concerns.</footer>
+</body>
+</html>

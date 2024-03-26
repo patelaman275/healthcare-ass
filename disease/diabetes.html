@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="shortcut icon" type="x-icon" href="bug.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diabetes Risk Calculator</title>
+<link href="css/style3.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+</head>
+<body>
+
+<form id="diabetesRiskCalculatorForm">
+    <h2>Personal Information:</h2>
+    <label for="age">Age</label>
+    <input type="number" id="age" required>
+    <label for="gender">Gender</label>
+    <select id="gender" required>
+        <option value="">Select</option>
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+        <option value="Other">Other</option>
+    </select>
+
+    <label for="weight">Weight (in kg)</label>
+    <input type="number" id="weight" required>
+    <label for="height">Height (in cm)</label>
+    <input type="number" id="height" required>
+
+    <label for="sugar">Do you consume sugary foods/drinks regularly?</label>
+    <select id="sugar" required>
+        <option value="">Select</option>
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+    </select>
+
+    <h2>Medical History:</h2>
+    <label for="familyDiabetes">Family History of Diabetes?</label>
+    <select id="familyDiabetes" required>
+        <option value="">Select</option>
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+    </select>
+
+    <label for="hypertension">Hypertension (High Blood Pressure)?</label>
+    <select id="hypertension" required>
+        <option value="">Select</option>
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+    </select>
+
+    <label for="exercise">Do you engage in regular exercise?</label>
+    <select id="exercise" required>
+        <option value="">Select</option>
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+    </select>
+
+    <label for="diet">Do you have a healthy diet?</label>
+    <select id="diet" required>
+        <option value="">Select</option>
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+    </select>
+
+    <h2>Medical Tests:</h2>
+    <label for="glucoseFasting">Fasting Blood Sugar Level (mg/dL)</label>
+    <input type="number" id="glucoseFasting" required>
+    <label for="glucoseRandom">Random Blood Sugar Level (mg/dL)</label>
+    <input type="number" id="glucoseRandom" required>
+
+    <h2>Additional Questions:</h2>
+    <label for="urination">Do you experience frequent urination?</label>
+    <select id="urination" required>
+        <option value="">Select</option>
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+    </select>
+
+    <label for="thirst">Do you experience excessive thirst?</label>
+    <select id="thirst" required>
+        <option value="">Select</option>
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+    </select>
+
+    <button type="button" onclick="calculateDiabetesRisk()">Calculate Risk</button>
+</form>
+
+<div class="result" id="diabetesResult"></div>
+
+
+<script>
+function calculateDiabetesRisk() {
+    const age = parseInt(document.getElementById('age').value);
+    const gender = document.getElementById('gender').value;
+    const weight = parseInt(document.getElementById('weight').value);
+    const height = parseInt(document.getElementById('height').value);
+    const sugar = document.getElementById('sugar').value;
+    const familyDiabetes = document.getElementById('familyDiabetes').value;
+    const hypertension = document.getElementById('hypertension').value;
+    const exercise = document.getElementById('exercise').value;
+    const diet = document.getElementById('diet').value;
+    const glucoseFasting = parseInt(document.getElementById('glucoseFasting').value);
+    const glucoseRandom = parseInt(document.getElementById('glucoseRandom').value);
+    const urination = document.getElementById('urination').value;
+    const thirst = document.getElementById('thirst').value;
+
+    // Perform risk calculation
+    let riskPercentage = 0;
+
+    // Adding points based on risk factors
+    if (age > 45) riskPercentage += 10;
+    if (gender === "Male") riskPercentage += 5;
+    if (weight > 90) riskPercentage += 10;
+    if (height < 160) riskPercentage += 10;
+    if (sugar === "Yes") riskPercentage += 10;
+    if (familyDiabetes === "Yes") riskPercentage += 10;
+    if (hypertension === "Yes") riskPercentage += 10;
+    if (exercise === "No") riskPercentage += 10;
+    if (diet === "No") riskPercentage += 10;
+
+    // Adjust risk based on glucose levels
+    if (glucoseFasting >= 126) riskPercentage += 20; // Fasting glucose level indicative of diabetes
+    if (glucoseRandom >= 200) riskPercentage += 20; // Random glucose level indicative of diabetes
+
+    // Adjust risk based on additional questions
+    if (urination === "Yes") riskPercentage += 10; // Frequent urination indicative of diabetes
+    if (thirst === "Yes") riskPercentage += 10; // Excessive thirst indicative of diabetes
+
+    let message;
+
+    // Determine risk category and message
+    if (riskPercentage <= 25) {
+        message = "Your risk of diabetes is low. Keep maintaining a healthy lifestyle and regular check-ups.";
+    } else if (riskPercentage > 25 && riskPercentage <= 50) {
+        message = "Your risk of diabetes is moderate. Consider making some lifestyle changes and consult a doctor for advice.";
+    } else if (riskPercentage > 50 && riskPercentage <= 75) {
+        message = "Your risk of diabetes is high. It's important to consult a doctor for evaluation and to implement preventive measures.";
+    } else {
+        message = "Your risk of diabetes is very high. Immediate medical attention is strongly advised. Please consult a doctor as soon as possible.";
+    }
+
+    document.getElementById('diabetesResult').innerText = message;
+}
+</script>
+<footer>
+    <p><strong>⚠️Disclaimer:</strong> This website offers general information and should not be a substitute for professional medical advice. Always consult with a healthcare provider for any health concerns.</p>
+</footer>
+</body>
+</html>

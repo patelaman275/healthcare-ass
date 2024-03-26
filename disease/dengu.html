@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dengue Fever Probability Calculator</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+    }
+    form {
+        max-width: 400px;
+        margin: 0 auto;
+    }
+    input[type="text"], input[type="number"] {
+        width: 100%;
+        padding: 10px;
+        margin: 5px 0;
+        box-sizing: border-box;
+    }
+    button {
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        cursor: pointer;
+    }
+    button:hover {
+        background-color: #45a049;
+    }
+    #result {
+        margin-top: 20px;
+    }
+</style>
+</head>
+<body>
+
+<h2>Dengue Fever Probability Calculator</h2>
+
+<form id="dengueForm">
+    <label for="age">Age:</label>
+    <input type="number" id="age" name="age" required><br>
+    
+    <label for="fever">Fever (in °F):</label>
+    <input type="number" id="fever" name="fever" required><br>
+    
+    <label for="platelet">Platelet count (per µL):</label>
+    <input type="number" id="platelet" name="platelet" required><br>
+    
+    <label for="symptoms">Number of dengue symptoms:</label>
+    <input type="number" id="symptoms" name="symptoms" required><br>
+    
+    <label for="exposure">Have you traveled to a dengue-endemic area recently?</label>
+    <select id="exposure" name="exposure">
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+    </select><br>
+    
+    <label for="days_since_exposure">Days since exposure (if applicable):</label>
+    <input type="number" id="days_since_exposure" name="days_since_exposure"><br>
+    
+    <button type="button" onclick="calculateProbability()">Calculate Probability</button>
+</form>
+
+<div id="result"></div>
+
+<script>
+    function calculateProbability() {
+        var age = parseInt(document.getElementById('age').value);
+        var fever = parseFloat(document.getElementById('fever').value);
+        var platelet = parseInt(document.getElementById('platelet').value);
+        var symptoms = parseInt(document.getElementById('symptoms').value);
+        var exposure = document.getElementById('exposure').value;
+        var daysSinceExposure = parseInt(document.getElementById('days_since_exposure').value);
+        
+        // Simple hypothetical calculation, not based on real data or models
+        var probability = 0.1 * age + 0.15 * fever + 0.2 * (150000 - platelet) + 0.3 * symptoms;
+        
+        // Adjust probability based on exposure and days since exposure
+        if (exposure === 'yes') {
+            if (daysSinceExposure >= 1 && daysSinceExposure <= 7) {
+                probability += 30;
+            } else if (daysSinceExposure > 7 && daysSinceExposure <= 14) {
+                probability += 20;
+            }
+        }
+        
+        // Displaying the result
+        var resultDiv = document.getElementById('result');
+        resultDiv.innerHTML = '<p>The probability of having dengue fever based on the provided information is approximately: ' + probability.toFixed(2) + '%</p>';
+    }
+</script>
+
+</body>
+</html>

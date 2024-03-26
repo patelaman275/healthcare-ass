@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="shortcut icon" type="x-icon" href="bug.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Heart Disease Risk Calculator</title>
+<link href="css/style3.css" rel="stylesheet">
+</head>
+<body>
+    
+    <div class="container">
+        <form id="heartDiseaseRiskCalculatorForm">
+            <h2>Personal Information:</h2>
+            <label for="age">Age:</label>
+            <input type="number" id="age" required>
+
+            <label for="gender">Gender:</label>
+            <select id="gender" required>
+                <option value="">Select</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+            </select>
+
+            <label for="weight">Weight (kg):</label>
+            <input type="number" id="weight" required>
+
+            <label for="height">Height (cm):</label>
+            <input type="number" id="height" required>
+
+            <label for="smoker">Are you a smoker?</label>
+            <select id="smoker" required>
+                <option value="">Select</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+            </select>
+
+            <label for="physicalActivity">Do you engage in regular physical activity?</label>
+            <select id="physicalActivity" required>
+                <option value="">Select</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+            </select>
+
+            <label for="familyHistory">Do you have a family history of heart disease?</label>
+            <select id="familyHistory" required>
+                <option value="">Select</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+            </select>
+
+            <h2>Medical Tests:</h2>
+            <label for="cholesterolLevel">Cholesterol Level (mg/dL):</label>
+            <input type="number" id="cholesterolLevel" required>
+
+            <label for="restingBloodPressure">Resting Blood Pressure (mmHg):</label>
+            <input type="number" id="restingBloodPressure" required>
+
+            <label for="maxHeartRate">Maximum Heart Rate (bpm):</label>
+            <input type="number" id="maxHeartRate" required>
+
+            <label for="fastingBloodSugar">Fasting Blood Sugar (mg/dL):</label>
+            <input type="number" id="fastingBloodSugar" required>
+
+            <h3>Questions asked by the doctor:</h3>
+            <label>1. Have you experienced any chest pain or discomfort?</label>
+            <select id="chestPain" required>
+                <option value="">Select</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+            </select>
+
+            <label>2. Do you experience shortness of breath, especially during physical activity?</label>
+            <select id="shortnessOfBreath" required>
+                <option value="">Select</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+            </select>
+
+            <label>3. Have you been diagnosed with high blood pressure?</label>
+            <select id="highBloodPressure" required>
+                <option value="">Select</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+            </select>
+
+            <button type="button" onclick="calculateHeartDiseaseRisk()">Calculate Risk</button>
+        </form>
+
+        <div id="myModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <div id="riskPercentageCircle"></div>
+                <div id="riskMessage"></div>
+            </div>
+        </div>
+
+        <script>
+           // Function to calculate heart disease risk
+function calculateHeartDiseaseRisk() {
+    // Get form inputs
+    const age = parseInt(document.getElementById('age').value);
+    const gender = document.getElementById('gender').value;
+    const weight = parseInt(document.getElementById('weight').value);
+    const height = parseInt(document.getElementById('height').value);
+    const smoker = document.getElementById('smoker').value;
+    const physicalActivity = document.getElementById('physicalActivity').value;
+    const familyHistory = document.getElementById('familyHistory').value;
+    const cholesterolLevel = parseInt(document.getElementById('cholesterolLevel').value);
+    const restingBloodPressure = parseInt(document.getElementById('restingBloodPressure').value);
+    const maxHeartRate = parseInt(document.getElementById('maxHeartRate').value);
+    const fastingBloodSugar = parseInt(document.getElementById('fastingBloodSugar').value);
+    const chestPain = document.getElementById('chestPain').value;
+    const shortnessOfBreath = document.getElementById('shortnessOfBreath').value;
+    const highBloodPressure = document.getElementById('highBloodPressure').value;
+
+    // Perform risk calculation
+    let riskPercentage = 0;
+
+    // Adding points based on risk factors
+    if (age > 45) riskPercentage += 10;
+    if (gender === "Male") riskPercentage += 5;
+    if ((weight / (height / 100) ** 2) >= 25) riskPercentage += 10; // BMI
+    if (smoker === "Yes") riskPercentage += 10;
+    if (physicalActivity === "No") riskPercentage += 10;
+    if (familyHistory === "Yes") riskPercentage += 10;
+
+    // Adjust risk based on medical tests
+    if (cholesterolLevel >= 240) riskPercentage += 10; // High cholesterol
+    if (restingBloodPressure >= 140 || restingBloodPressure <= 90) riskPercentage += 10; // High or low blood pressure
+    if (maxHeartRate < 100 || maxHeartRate > 220 - age) riskPercentage += 10; // Abnormal maximum heart rate
+    if (fastingBloodSugar >= 126) riskPercentage += 10; // High fasting blood sugar
+
+    // Adjust risk based on responses to doctor's questions
+    if (chestPain === "Yes") riskPercentage += 10;
+    if (shortnessOfBreath === "Yes") riskPercentage += 10;
+    if (highBloodPressure === "Yes") riskPercentage += 10;
+
+    let message;
+
+    // Determine risk category and message
+    if (riskPercentage <= 25) {
+        message = "Your risk of heart disease is low. Keep up with healthy habits and regular check-ups.";
+    } else if (riskPercentage > 25 && riskPercentage <= 50) {
+        message = "Your risk of heart disease is moderate. Consider making lifestyle changes and consult a healthcare professional for further evaluation.";
+    } else if (riskPercentage > 50 && riskPercentage <= 75) {
+        message = "Your risk of heart disease is high. It's important to take immediate action to lower your risk factors and consult a healthcare professional for advice.";
+    } else {
+        message = "Your risk of heart disease is very high. Immediate medical attention is necessary. Please seek medical help as soon as possible.";
+    }
+
+    // Display the result in a pop-up modal
+    openModal(riskPercentage, message);
+}
+
+// Function to open the modal with the risk percentage and message
+function openModal(riskPercentage, riskMessage) {
+    const modal = document.getElementById("myModal");
+    const modalContent = document.querySelector(".modal-content");
+    const riskPercentageCircle = document.getElementById("riskPercentageCircle");
+    const riskMessageElement = document.getElementById("riskMessage");
+
+    // Set risk percentage circle color based on risk level
+    if (riskPercentage <= 25) {
+        riskPercentageCircle.style.backgroundColor = "green";
+    } else if (riskPercentage > 25 && riskPercentage <= 50) {
+        riskPercentageCircle.style.backgroundColor = "yellow";
+    } else if (riskPercentage > 50 && riskPercentage <= 75) {
+        riskPercentageCircle.style.backgroundColor = "orange";
+    } else {
+        riskPercentageCircle.style.backgroundColor = "red";
+    }
+
+    // Set risk percentage in the circle
+    riskPercentageCircle.innerText = riskPercentage + "%";
+
+    // Set risk message
+    riskMessageElement.innerText = riskMessage;
+
+    // Display the modal
+    modal.style.display = "block";
+
+    // Close the modal when the close button or outside the modal is clicked
+    window.onclick = function (event) {
+        if (event.target === modal) {
+            modal.style.display = "none";
+        }
+    };
+
+    // Close the modal when the close button is clicked
+    const closeButton = document.querySelector(".close");
+    closeButton.onclick = function () {
+        modal.style.display = "none";
+    };
+}
+
+// Close the modal when the close button is clicked
+const closeButton = document.querySelector(".close");
+closeButton.onclick = function () {
+    const modal = document.getElementById("myModal");
+    modal.style.display = "none";
+};
+
+        </script>
+    </div>
+
+    <footer>
+        <p><strong>⚠️Disclaimer:</strong> This website offers general information and should not be a substitute for professional medical advice. Always consult with a healthcare provider for any health concerns.</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="shortcut icon" type="x-icon" href="bug.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Breast Cancer Risk Calculator</title>
+<link href="css/style3.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="container">
+    <h2>Breast Cancer Risk Calculator</h2>
+    <form id="breastCancerRiskCalculatorForm">
+        <h3>Personal Information:</h3>
+        <label for="age">Age:</label>
+        <input type="number" id="age" required>
+
+        <label for="gender">Gender:</label>
+        <select id="gender" required onchange="showAdditionalFields()">
+            <option value="">Select</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+        </select>
+
+        <label for="weight">Weight (kg):</label>
+        <input type="number" id="weight" required>
+
+        <label for="height">Height (cm):</label>
+        <input type="number" id="height" required>
+
+        <div id="femaleAdditionalFields" style="display:none;">
+            <label for="ageAtFirstPeriod">Age at First Period:</label>
+            <input type="number" id="ageAtFirstPeriod">
+
+            <label for="ageAtFirstChildbirth">Age at First Childbirth (if any):</label>
+            <input type="number" id="ageAtFirstChildbirth">
+
+            <label for="familyHistory">Family History (Close Relative with Breast Cancer):</label>
+            <select id="familyHistory">
+                <option value="">Select</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+            </select>
+
+            <label for="breastfeedingHistory">Breastfeeding History:</label>
+            <select id="breastfeedingHistory">
+                <option value="">Select</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+            </select>
+
+            <label for="menstrualReproductiveHistory">Menstrual and Reproductive History:</label>
+            <select id="menstrualReproductiveHistory">
+                <option value="">Select</option>
+                <option value="Regular">Regular</option>
+                <option value="Irregular">Irregular</option>
+            </select>
+
+            <label for="hrtBirthControl">Hormone Replacement Therapy (HRT) and Birth Control:</label>
+            <select id="hrtBirthControl">
+                <option value="">Select</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+            </select>
+
+            <label for="breastChanges">Changes in Breast Size or Shape:</label>
+            <select id="breastChanges">
+                <option value="">Select</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+            </select>
+
+            <label for="breastPain">Persistent Breast Pain:</label>
+            <select id="breastPain">
+                <option value="">Select</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+            </select>
+
+            <label for="cholesterolLevel">Cholesterol Level (mg/dL):</label>
+            <input type="number" id="cholesterolLevel" required>
+
+            <label for="bloodPressure">Resting Blood Pressure (mmHg):</label>
+            <input type="number" id="bloodPressure" required>
+
+            <label for="heartRate">Maximum Heart Rate (bpm):</label>
+            <input type="number" id="heartRate" required>
+
+            <label for="bloodSugar">Fasting Blood Sugar (mg/dL):</label>
+            <input type="number" id="bloodSugar" required>
+        </div>
+
+        <div id="maleAdditionalFields" style="display:none;">
+            <label for="maleFamilyHistory">Family History (Close Relative with Male Breast Cancer):</label>
+            <select id="maleFamilyHistory">
+                <option value="">Select</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+            </select>
+
+            <label for="klinefelterSyndrome">Klinefelter Syndrome:</label>
+            <select id="klinefelterSyndrome">
+                <option value="">Select</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+            </select>
+
+            <label for="chestRadiation">Chest Radiation Therapy:</label>
+            <select id="chestRadiation">
+                <option value="">Select</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+            </select>
+
+            <label for="testicularCancer">Testicular Cancer:</label>
+            <select id="testicularCancer">
+                <option value="">Select</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+            </select>
+
+            <label for="liverDisease">Liver Disease:</label>
+            <select id="liverDisease">
+                <option value="">Select</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+            </select>
+
+            <label for="cholesterolLevel">Cholesterol Level (mg/dL):</label>
+            <input type="number" id="cholesterolLevel" required>
+
+            <label for="bloodPressure">Resting Blood Pressure (mmHg):</label>
+            <input type="number" id="bloodPressure" required>
+
+            <label for="heartRate">Maximum Heart Rate (bpm):</label>
+            <input type="number" id="heartRate" required>
+
+            <label for="bloodSugar">Fasting Blood Sugar (mg/dL):</label>
+            <input type="number" id="bloodSugar" required>
+        </div>
+
+        <button type="button" onclick="calculateBreastCancerRisk()">Calculate Risk</button>
+
+        <div class="result" id="breastCancerRiskResult" style="display: none;">
+            <!-- Result will be displayed here -->
+        </div>
+    </form>
+</div>
+
+
+<script>
+    function showAdditionalFields() {
+        var gender = document.getElementById("gender").value;
+        var femaleAdditionalFields = document.getElementById("femaleAdditionalFields");
+        var maleAdditionalFields = document.getElementById("maleAdditionalFields");
+
+        if (gender === "Female") {
+            femaleAdditionalFields.style.display = "block";
+            maleAdditionalFields.style.display = "none";
+        } else if (gender === "Male") {
+            maleAdditionalFields.style.display = "block";
+            femaleAdditionalFields.style.display = "none";
+        } else {
+            femaleAdditionalFields.style.display = "none";
+            maleAdditionalFields.style.display = "none";
+        }
+    }
+
+    function calculateBreastCancerRisk() {
+        const age = parseInt(document.getElementById('age').value);
+        const gender = document.getElementById('gender').value;
+        const weight = parseInt(document.getElementById('weight').value);
+        const height = parseInt(document.getElementById('height').value);
+        const ageAtFirstPeriod = parseInt(document.getElementById('ageAtFirstPeriod').value);
+        const ageAtFirstChildbirth = parseInt(document.getElementById('ageAtFirstChildbirth').value);
+        const familyHistory = document.getElementById('familyHistory').value;
+        const breastfeedingHistory = document.getElementById('breastfeedingHistory').value;
+        const menstrualReproductiveHistory = document.getElementById('menstrualReproductiveHistory').value;
+        const hrtBirthControl = document.getElementById('hrtBirthControl').value;
+        const breastChanges = document.getElementById('breastChanges').value;
+        const breastPain = document.getElementById('breastPain').value;
+        const maleFamilyHistory = document.getElementById('maleFamilyHistory').value;
+        const klinefelterSyndrome = document.getElementById('klinefelterSyndrome').value;
+        const chestRadiation = document.getElementById('chestRadiation').value;
+        const testicularCancer = document.getElementById('testicularCancer').value;
+        const liverDisease = document.getElementById('liverDisease').value;
+        const cholesterolLevel = parseInt(document.getElementById('cholesterolLevel').value);
+        const bloodPressure = parseInt(document.getElementById('bloodPressure').value);
+        const heartRate = parseInt(document.getElementById('heartRate').value);
+        const bloodSugar = parseInt(document.getElementById('bloodSugar').value);
+
+        // Perform risk calculation
+        let riskPercentage = 0;
+
+        // Adding points based on risk factors
+        if (age > 50) riskPercentage += 10;
+        if (gender === "Female") {
+            if ((weight / (height / 100) ** 2) >= 30) riskPercentage += 10; // BMI
+            if (ageAtFirstPeriod < 12 || ageAtFirstPeriod > 16) riskPercentage += 10; // Abnormal age at first period
+            if (ageAtFirstChildbirth > 30 || ageAtFirstChildbirth < 20) riskPercentage += 10; // Abnormal age at first childbirth
+            // Add points based on additional factors for females
+            if (cholesterolLevel >= 200) riskPercentage += 10;
+            if (bloodPressure >= 120) riskPercentage += 10;
+            if (heartRate >= 100) riskPercentage += 10;
+            if (bloodSugar >= 100) riskPercentage += 10;
+        } else if (gender === "Male") {
+            // Add points based on additional factors for males
+            if (chestRadiation === "Yes") riskPercentage += 10;
+            if (testicularCancer === "Yes") riskPercentage += 10;
+            if (liverDisease === "Yes") riskPercentage += 10;
+            if (cholesterolLevel >= 200) riskPercentage += 10;
+            if (bloodPressure >= 120) riskPercentage += 10;
+            if (heartRate >= 100) riskPercentage += 10;
+            if (bloodSugar >= 100) riskPercentage += 10;
+        }
+
+        // Display the result
+        const resultElement = document.getElementById('breastCancerRiskResult');
+        resultElement.innerHTML = `<h3>Breast Cancer Risk Assessment Result:</h3>`;
+        resultElement.innerHTML += `<p>Risk Percentage: ${riskPercentage}%</p>`;
+        resultElement.style.display = "block";
+    }
+</script>
+<footer>
+    <p><strong>⚠️Disclaimer:</strong> This website offers general information and should not be a substitute for professional medical advice. Always consult with a healthcare provider for any health concerns.</p>
+</footer>
+</body>
+</html>
+

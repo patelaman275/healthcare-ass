@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="shortcut icon" type="x-icon" href="bug.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Liver Disease Risk Calculator</title>
+<link href="css/style3.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+<form id="riskCalculatorForm">
+    <h2>Medical History:</h2>
+    <label for="knownLiverConditions">Do you have any known liver conditions or a family history of liver disease?</label>
+    <select id="knownLiverConditions" required>
+        <option value="">Select</option>
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+    </select>
+
+    <label for="otherMedicalConditions">Have you been diagnosed with any other medical conditions such as diabetes, hypertension, or autoimmune diseases?</label>
+    <select id="otherMedicalConditions" required>
+        <option value="">Select</option>
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+    </select>
+
+    <label for="medications">Are you currently taking any medications or supplements, including over-the-counter drugs and herbal remedies?</label>
+    <select id="medications" required>
+        <option value="">Select</option>
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+    </select>
+
+    <h2>Symptoms:</h2>
+    <label for="symptoms">Have you experienced any symptoms such as jaundice (yellowing of the skin or eyes), abdominal pain, nausea, vomiting, or changes in appetite?</label>
+    <select id="symptoms" required>
+        <option value="">Select</option>
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+    </select>
+
+    <label for="fatigue">Do you have any unexplained fatigue, weakness, or weight loss?</label>
+    <select id="fatigue" required>
+        <option value="">Select</option>
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+    </select>
+
+    <label for="swelling">Have you noticed any swelling in your abdomen or legs?</label>
+    <select id="swelling" required>
+        <option value="">Select</option>
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+    </select>
+
+    <h2>Numerical Data:</h2>
+    <label for="alt">Alanine Aminotransferase (10-40 U/L)</label>
+    <input type="number" id="alt" required>
+    <label for="ast">Aspartate Aminotransferase 7-56 U/L(men),5-36 U/L(women)</label>
+    <input type="number" id="ast" required>
+    <label for="alp">Alkaline Phosphatase (44-147 U/L)</label>
+    <input type="number" id="alp" required>
+    <label for="ggt">Gamma-Glutamyl Transferase 9-48 U/L (men), 9-36 U/L for (women) </label>
+    <input type="number" id="ggt" required>
+    <label for="bilirubin">Total Bilirubin (0.1-1.2mg/dL) </label>
+    <input type="number" id="bilirubin" required>
+    <label for="alcohol">Alcohol Consumption (in units/week) 
+        <P>~Low-risk drinking: Up to 14 units per week for men and up to 7 units per week for women</p>
+        <p>~Moderate drinking: 15 to 21 units per week for men and 8 to 14 units per week for women</p>
+        <p>~High-risk drinking: More than 21 units per week for men and more than 14 units per week for women</P>  </label>
+    <input type="number" id="alcohol" required>
+
+    <h2>Additional Data:</h2>
+    <label for="age">Age</label>
+    <input type="number" id="age" required>
+    <label for="weight">Weight (in kg)</label>
+    <input type="number" id="weight" required>
+    <label for="gender">Gender</label>
+    <select id="gender" required>
+        <option value="">Select</option>
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+        <option value="Other">Other</option>
+    </select>
+
+    <button type="button" onclick="calculateRisk()">Calculate Risk</button>
+</form>
+
+<div class="result" id="result"></div>
+
+<script>
+function calculateRisk() {
+    const knownLiverConditions = document.getElementById('knownLiverConditions').value;
+    const otherMedicalConditions = document.getElementById('otherMedicalConditions').value;
+    const medications = document.getElementById('medications').value;
+    const symptoms = document.getElementById('symptoms').value;
+    const fatigue = document.getElementById('fatigue').value;
+    const swelling = document.getElementById('swelling').value;
+    const alt = parseFloat(document.getElementById('alt').value);
+    const ast = parseFloat(document.getElementById('ast').value);
+    const alp = parseFloat(document.getElementById('alp').value);
+    const ggt = parseFloat(document.getElementById('ggt').value);
+    const bilirubin = parseFloat(document.getElementById('bilirubin').value);
+    const alcohol = parseFloat(document.getElementById('alcohol').value);
+    const age = parseInt(document.getElementById('age').value);
+    const weight = parseInt(document.getElementById('weight').value);
+    const gender = document.getElementById('gender').value;
+
+    let riskPercentage = 0;
+    if (knownLiverConditions === "Yes") riskPercentage += 20;
+    if (otherMedicalConditions === "Yes") riskPercentage += 15;
+    if (medications === "Yes") riskPercentage += 10;
+    if (symptoms === "Yes") riskPercentage += 25;
+    if (fatigue === "Yes") riskPercentage += 10;
+    if (swelling === "Yes") riskPercentage += 20;
+
+    riskPercentage += (alt + ast + alp + ggt + bilirubin + alcohol) / 6;
+
+    if (age > 50) riskPercentage += 10;
+    if (weight > 90) riskPercentage += 10;
+    if (gender === "Male") riskPercentage += 5;
+
+    let message;
+
+    if (riskPercentage <= 25) {
+        message = "Your liver disease risk is low. Keep up the good work and maintain a healthy lifestyle!";
+    } else if (riskPercentage > 25 && riskPercentage <= 50) {
+        message = "Your liver disease risk is moderate. Consider making some lifestyle changes and consult a doctor for advice.";
+    } else if (riskPercentage > 50 && riskPercentage <= 75) {
+        message = "Your liver disease risk is high. It's important to consult a doctor for evaluation and to implement preventive measures.";
+    } else {
+        message = "Your liver disease risk is very high. Immediate medical attention is strongly advised. Please consult a doctor as soon as possible.";
+    }
+
+    document.getElementById('result').innerText = message;
+}
+</script>
+<footer>
+    <p><strong>⚠️Disclaimer:</strong> This website offers general information and should not be a substitute for professional medical advice. Always consult with a healthcare provider for any health concerns.</p>
+</footer>
+</body>
+</html>

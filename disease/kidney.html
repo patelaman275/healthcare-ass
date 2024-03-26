@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="shortcut icon" type="x-icon" href="bug.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kidney Disease Risk Calculator</title>
+<link href="css/style3.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+<form id="kidneyDiseaseRiskCalculatorForm">
+    <h2>Personal Information:</h2>
+    <label for="age">Age:</label>
+    <input type="number" id="age" required>
+
+    <label for="gender">Gender:</label>
+    <select id="gender" required>
+        <option value="">Select</option>
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+    </select>
+
+    <label for="weight">Weight (kg):</label>
+    <input type="number" id="weight" required>
+
+    <label for="height">Height (cm):</label>
+    <input type="number" id="height" required>
+
+    <label for="bloodPressure">Blood Pressure (mmHg):</label>
+    <input type="text" id="bloodPressure" required>
+
+    <label for="serumCreatinineLevel">Serum Creatinine Level (mg/dL):</label>
+    <input type="number" id="serumCreatinineLevel" required>
+
+    <label for="estimatedGFR">Estimated GFR (ml/min/1.73m<sup>2</sup>):</label>
+    <input type="number" id="estimatedGFR" required>
+
+    <h3>Questions asked by the doctor:</h3>
+    <label>1. Have you been diagnosed with diabetes?</label>
+    <select id="diabetes" required>
+        <option value="">Select</option>
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+    </select>
+
+    <label>2. Do you have high blood pressure?</label>
+    <select id="highBloodPressure" required>
+        <option value="">Select</option>
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+    </select>
+
+    <label>3. Do you have a family history of kidney disease?</label>
+    <select id="familyHistory" required>
+        <option value="">Select</option>
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+    </select>
+
+    <label>Do you experience any of these symptoms?</label>
+    <select id="symptoms" required>
+        <option value="">Select</option>
+        <option value="Fatigue">Fatigue</option>
+        <option value="Swelling">Swelling</option>
+        <option value="Changes in Urine Output">Changes in Urine Output</option>
+        <option value="Blood in Urine">Blood in Urine</option>
+    </select>
+
+    <button type="button" onclick="calculateKidneyDiseaseRisk()">Calculate Risk</button>
+</form>
+
+<div class="result" id="kidneyDiseaseRiskResult"></div>
+
+<script>
+function calculateKidneyDiseaseRisk() {
+    const age = parseInt(document.getElementById('age').value);
+    const gender = document.getElementById('gender').value;
+    const weight = parseInt(document.getElementById('weight').value);
+    const height = parseInt(document.getElementById('height').value);
+    const bloodPressure = document.getElementById('bloodPressure').value;
+    const serumCreatinineLevel = parseFloat(document.getElementById('serumCreatinineLevel').value);
+    const estimatedGFR = parseFloat(document.getElementById('estimatedGFR').value);
+    const diabetes = document.getElementById('diabetes').value;
+    const highBloodPressure = document.getElementById('highBloodPressure').value;
+    const familyHistory = document.getElementById('familyHistory').value;
+    const symptoms = document.getElementById('symptoms').value;
+
+    // Perform risk calculation
+    let riskPercentage = 0;
+
+    // Adding points based on risk factors
+    if (age > 60) riskPercentage += 10;
+    if (gender === "Male") riskPercentage += 5;
+    if ((weight / (height / 100) ** 2) >= 30) riskPercentage += 10; // BMI
+    if (bloodPressure >= 140 || bloodPressure <= 90) riskPercentage += 10; // High or low blood pressure
+    if (serumCreatinineLevel > 1.2) riskPercentage += 10; // Elevated serum creatinine level
+    if (estimatedGFR < 60) riskPercentage += 10; // Low estimated GFR
+    if (diabetes === "Yes") riskPercentage += 10;
+    if (highBloodPressure === "Yes") riskPercentage += 10;
+    if (familyHistory === "Yes") riskPercentage += 10;
+
+    // Adjust risk based on symptoms
+    if (symptoms !== "") riskPercentage += 10;
+
+    let message;
+
+    // Determine risk category and message
+    if (riskPercentage <= 25) {
+        message = "Your risk of kidney disease is low. Maintain a healthy lifestyle and regular check-ups.";
+    } else if (riskPercentage > 25 && riskPercentage <= 50) {
+        message = "Your risk of kidney disease is moderate. Consider consulting a healthcare professional for further evaluation.";
+    } else if (riskPercentage > 50 && riskPercentage <= 75) {
+        message = "Your risk of kidney disease is high. It's important to monitor your kidney health closely and seek medical advice.";
+    } else {
+        message = "Your risk of kidney disease is very high. Immediate medical attention is necessary. Please consult a healthcare professional as soon as possible.";
+    }
+
+    // Display the result message
+    document.getElementById('kidneyDiseaseRiskResult').innerText = message;
+}
+</script>
+<footer>
+    <p><strong>⚠️Disclaimer:</strong> This website offers general information and should not be a substitute for professional medical advice. Always consult with a healthcare provider for any health concerns.</p>
+</footer>
+</body>
+</html>

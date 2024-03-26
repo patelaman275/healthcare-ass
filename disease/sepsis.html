@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="shortcut icon" type="x-icon" href="bug.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sepsis Risk Calculator</title>
+<link href="css/style3.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+
+<form id="sepsisRiskCalculatorForm">
+    <h2>Medical Information:</h2>
+    <label for="age">Age:</label>
+    <input type="number" id="age" required>
+
+    <label for="gender">Gender:</label>
+    <select id="gender" required>
+        <option value="">Select</option>
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+        <option value="Other">Other</option>
+    </select>
+
+    <label for="chronicDiseases">Do you have any chronic diseases (e.g., diabetes, heart disease)?</label>
+    <select id="chronicDiseases" required>
+        <option value="">Select</option>
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+    </select>
+
+    <label for="immunosuppression">Are you immunosuppressed (e.g., due to medications or medical conditions)?</label>
+    <select id="immunosuppression" required>
+        <option value="">Select</option>
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+    </select>
+
+    <h2>Symptoms:</h2>
+    <label for="fever">Do you have a fever (temperature above 100.4°F or 38°C)?</label>
+    <select id="fever" required>
+        <option value="">Select</option>
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+    </select>
+
+    <label for="rapidBreathing">Do you experience rapid breathing?</label>
+    <select id="rapidBreathing" required>
+        <option value="">Select</option>
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+    </select>
+
+    <label for="alteredMentalState">Do you have an altered mental state?</label>
+    <select id="alteredMentalState" required>
+        <option value="">Select</option>
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+    </select>
+
+    <h2>Vital Signs:</h2>
+    <label for="temperature">Body Temperature (°C):</label>
+    <input type="number" id="temperature" required>
+
+    <label for="respiratoryRate">Respiratory Rate (breaths/min):</label>
+    <input type="number" id="respiratoryRate" required>
+
+    <label for="heartRate">Heart Rate (bpm):</label>
+    <input type="number" id="heartRate" required>
+
+    <label for="whiteBloodCellCount">White Blood Cell Count (cells/mm³):</label>
+    <input type="number" id="whiteBloodCellCount" required>
+
+    <label for="plateletCount">Platelet Count (cells/mm³):</label>
+    <input type="number" id="plateletCount" required>
+
+    <label for="lactateLevel">Lactate Level (mmol/L):</label>
+    <input type="number" id="lactateLevel" required>
+
+    <h3>Questions asked by the doctor:</h3>
+    <label>1. Have you had a recent infection or injury?</label>
+    <select id="infectionInjury" required>
+        <option value="">Select</option>
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+    </select>
+
+    <label>2. Are you experiencing any shortness of breath?</label>
+    <select id="shortnessOfBreath" required>
+        <option value="">Select</option>
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+    </select>
+
+    <label>3. Have you noticed any changes in your mental status?</label>
+    <select id="mentalStatusChange" required>
+        <option value="">Select</option>
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+    </select>
+
+    <button type="button" onclick="calculateSepsisRisk()">Calculate Risk</button>
+</form>
+
+<div class="result" id="sepsisResult"></div>
+
+<script>
+function calculateSepsisRisk() {
+    const age = parseInt(document.getElementById('age').value);
+    const gender = document.getElementById('gender').value;
+    const chronicDiseases = document.getElementById('chronicDiseases').value;
+    const immunosuppression = document.getElementById('immunosuppression').value;
+    const fever = document.getElementById('fever').value;
+    const rapidBreathing = document.getElementById('rapidBreathing').value;
+    const alteredMentalState = document.getElementById('alteredMentalState').value;
+    const temperature = parseFloat(document.getElementById('temperature').value);
+    const respiratoryRate = parseInt(document.getElementById('respiratoryRate').value);
+    const heartRate = parseInt(document.getElementById('heartRate').value);
+    const whiteBloodCellCount = parseInt(document.getElementById('whiteBloodCellCount').value);
+    const plateletCount = parseInt(document.getElementById('plateletCount').value);
+    const lactateLevel = parseFloat(document.getElementById('lactateLevel').value);
+    const infectionInjury = document.getElementById('infectionInjury').value;
+    const shortnessOfBreath = document.getElementById('shortnessOfBreath').value;
+    const mentalStatusChange = document.getElementById('mentalStatusChange').value;
+
+    // Perform risk calculation
+    let riskPercentage = 0;
+
+    // Adding points based on risk factors
+    if (age > 65) riskPercentage += 10;
+    if (gender === "Male") riskPercentage += 5;
+    if (chronicDiseases === "Yes") riskPercentage += 10;
+    if (immunosuppression === "Yes") riskPercentage += 10;
+    if (fever === "Yes") riskPercentage += 10;
+    if (rapidBreathing === "Yes") riskPercentage += 10;
+    if (alteredMentalState === "Yes") riskPercentage += 10;
+
+    // Adjust risk based on vital signs
+    if (temperature > 38) riskPercentage += 10; // High temperature indicative of sepsis
+    if (respiratoryRate > 20) riskPercentage += 10; // Increased respiratory rate indicative of sepsis
+    if (heartRate > 100) riskPercentage += 10; // Increased heart rate indicative of sepsis
+    if (whiteBloodCellCount > 12000 || whiteBloodCellCount < 4000) riskPercentage += 10; // Abnormal white blood cell count indicative of sepsis
+    if (plateletCount < 150000) riskPercentage += 10; // Low platelet count indicative of sepsis
+    if (lactateLevel > 2) riskPercentage += 10; // High lactate level indicative of sepsis
+
+    // Adjust risk based on responses to doctor's questions
+    if (infectionInjury === "Yes") riskPercentage += 10;
+    if (shortnessOfBreath === "Yes") riskPercentage += 10;
+    if (mentalStatusChange === "Yes") riskPercentage += 10;
+
+    let message;
+
+    // Determine risk category and message
+    if (riskPercentage <= 25) {
+        message = "Your risk of sepsis is low. Keep monitoring your symptoms and seek medical attention if necessary.";
+    } else if (riskPercentage > 25 && riskPercentage <= 50) {
+        message = "Your risk of sepsis is moderate. Pay close attention to your symptoms and consider consulting a healthcare professional.";
+    } else if (riskPercentage > 50 && riskPercentage <= 75) {
+        message = "Your risk of sepsis is high. It's important to seek medical attention promptly to prevent complications.";
+    } else {
+        message = "Your risk of sepsis is very high. Immediate medical attention is necessary. Please seek emergency care as soon as possible.";
+    }
+
+    // Display the result message
+    document.getElementById('sepsisResult').innerText = message;
+}
+</script>
+<footer>
+    <p><strong>⚠️Disclaimer:</strong> This website offers general information and should not be a substitute for professional medical advice. Always consult with a healthcare provider for any health concerns.</p>
+</footer>
+</body>
+</html>
