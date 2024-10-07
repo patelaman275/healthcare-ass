@@ -75,12 +75,8 @@ Understand the role of the optic nerve in vision and the conditions that can aff
 
  
 
-## Contact
 
-For inquiries or assistance, please contact us.
-
-
-Designed with ❤️ by Team WEB BUGS | © 2024. All rights reserved.
+### Designed with ❤️ by Team WEB BUGS | © 2024. All rights reserved.
 
 ---
 **Note:** This README provides an overview of the Health-AI project, its services, diseases covered, and frequently asked questions. For detailed information and access to specific disease detection tools, please visit the respective links provided in the document.
